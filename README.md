@@ -1,132 +1,65 @@
-# Analyse Numérique - Splines Quadratiques
+# Analyse Numérique : Outil d'Interpolation Unifié
 
-Ce projet implémente l'approximation de fonctions par splines quadratiques en Python, avec une documentation théorique complète.
+Ce projet est une application de bureau interactive qui combine plusieurs méthodes d'interpolation et d'approximation de fonctions. Il permet de visualiser et de comparer l'interpolation de Lagrange et l'approximation par spline quadratique pour une fonction donnée par l'utilisateur.
 
-## Contenu du projet
+## Fonctionnalités
 
-### Fichiers principaux
+- **Interface Graphique Unifiée** : Une seule fenêtre construite avec Tkinter pour accéder à toutes les analyses.
+- **Modes d'Analyse Multiples** : L'utilisateur peut choisir entre trois modes via des boutons radio :
+  1.  **Comparer Erreurs** : Affiche les courbes d'erreur de Lagrange et de la spline sur un même graphique pour une comparaison directe.
+  2.  **Lagrange** : Affiche l'approximation par le polynôme de Lagrange et sa courbe d'erreur.
+  3.  **Spline Quadratique** : Affiche l'approximation par spline quadratique et sa courbe d'erreur.
+- **Entrée de Fonction Dynamique** : Un champ de texte permet à l'utilisateur de saisir n'importe quelle fonction de `x`.
+- **Calcul Symbolique** : Utilise `sympy` pour interpréter la fonction et calculer sa dérivée, assurant une grande précision pour la condition initiale de la spline.
 
-1. **: Documentation théorique sur l'approximation polynomiale
-2. **[spline_quadratique.py] : Implémentation Python des splines quadratiques
-3. **README.md** : Ce fichier
+## Structure du Projet
 
-## Théorie
+Ce projet a été développé de manière incrémentale. Voici une description de chaque fichier clé et de son rôle dans l'évolution du projet :
 
-Le projet implémente l'approximation par splines quadratiques, une méthode d'approximation polynomiale par morceaux. 
+-   `analyse_numerique_gui.py`: **Application Finale et Unifiée.** C'est le script principal à utiliser. Il lance une interface graphique complète qui intègre toutes les fonctionnalités : l'analyse par interpolation de Lagrange, l'approximation par spline quadratique, et la comparaison de leurs erreurs respectives.
 
-### Principe
+-   `spline_quadratique.py`: **Première Étape.** Initialement, ce script implémentait l'approximation par spline quadratique. Il a d'abord été un script en ligne de commande, puis a été doté de sa propre interface graphique (Tkinter). Sa logique est maintenant intégrée dans l'application principale.
 
-Une spline quadratique S(x) est une fonction définie par morceaux qui vérifie :
-- Chaque segment sᵢ(x) est un polynôme de degré 2
-- S(x) est continue
-- S'(x) est continue
-- S(xᵢ) = f(xᵢ) (conditions d'interpolation)
+-   `lagrange.py`: **Deuxième Étape.** Ce script a été développé pour implémenter l'interpolation de Lagrange. Comme pour la spline, il a évolué d'un script en ligne de commande vers une application avec sa propre interface graphique. Sa fonctionnalité est également incluse dans l'application unifiée.
 
-Pour fixer une solution unique, on impose la condition S'(x₀) = 0.
+-   `comparaison_interpolation.py`: **Étape de Comparaison.** Ce script a été créé pour comparer directement les erreurs des deux méthodes (Lagrange et spline) via la ligne de commande. Cette fonctionnalité est maintenant une option dans l'interface graphique principale.
 
-### Formulation mathématique
+-   `requirements.txt`: La liste des dépendances Python (`numpy`, `matplotlib`, `sympy`) nécessaires pour exécuter le projet.
 
-Chaque segment est exprimé comme :
-`sᵢ(x) = aᵢ(x - xᵢ)² + bᵢ(x - xᵢ) + cᵢ`
+## Installation
 
-Avec :
-- cᵢ = yᵢ
-- bᵢ = zᵢ
-- aᵢ = (zᵢ₊₁ - zᵢ) / (2(xᵢ₊₁ - xᵢ))
+1.  **Clonez le dépôt** ou téléchargez les fichiers.
 
-Les valeurs zᵢ sont calculées récursivement :
-- z₀ = 0
-- zᵢ₊₁ = 2(yᵢ₊₁ - yᵢ)/(xᵢ₊₁ - xᵢ) - zᵢ
+2.  **Créez un environnement virtuel** (recommandé) :
+    ```bash
+    python -m venv env
+    source env/bin/activate  # Sur Windows: env\Scripts\activate
+    ```
 
-## Implémentation Python
-
-### Fonctions principales
-
-1. **calcul_coefficients_spline_quadratique(x, y)**
-   - Calcule les coefficients a, b, c pour chaque segment de la spline quadratique
-   - Paramètres : 
-     - x : tableau numpy des points xᵢ (doit être trié par ordre croissant)
-     - y : tableau numpy des valeurs f(xᵢ) aux points xᵢ
-   - Variables internes :
-     - n : nombre d'intervalles (n = len(x) - 1)
-     - z : tableau des dérivées zᵢ = S'(xᵢ) avec z₀ = 0
-   - Processus :
-     1. Initialise les tableaux a, b, c de taille n avec des zéros
-     2. Initialise le tableau z de taille n+1 avec z₀ = 0
-     3. Calcule récursivement tous les zᵢ selon la formule :
-        zᵢ₊₁ = 2(yᵢ₊₁ - yᵢ)/(xᵢ₊₁ - xᵢ) - zᵢ
-     4. Pour chaque intervalle i, calcule les coefficients :
-        - cᵢ = yᵢ
-        - bᵢ = zᵢ
-        - aᵢ = (zᵢ₊₁ - zᵢ) / (2(xᵢ₊₁ - xᵢ))
-   - Retourne : (a, b, c) tableaux numpy de coefficients
-
-2. **evaluer_spline(x_eval, x, a, b, c)**
-   - Évalue la spline quadratique en un point donné x_eval
-   - Paramètres :
-     - x_eval : valeur scalaire où évaluer la spline
-     - x : tableau numpy des points xᵢ (doit être le même que pour le calcul des coefficients)
-     - a, b, c : tableaux numpy des coefficients obtenus avec calcul_coefficients_spline_quadratique
-   - Processus :
-     1. Trouve l'intervalle [xᵢ, xᵢ₊₁] contenant x_eval
-     2. Gère le cas où x_eval est en dehors de l'intervalle [x₀, xₙ] en utilisant le dernier segment
-     3. Évalue le polynôme sᵢ(x) = aᵢ(x - xᵢ)² + bᵢ(x - xᵢ) + cᵢ
-   - Retourne : valeur scalaire de la spline en x_eval
-
-3. **test_spline_quadratique()**
-   - Teste l'implémentation sur la fonction sinus avec visualisation
-   - Processus :
-     1. Définit la fonction test f(x) = sin(x)
-     2. Crée 7 points équidistants dans [0, 2π]
-     3. Calcule les coefficients de la spline pour ces points
-     4. Évalue la spline sur 200 points pour le tracé
-     5. Trace la fonction originale et l'approximation par spline
-     6. Calcule et affiche les erreurs maximale et moyenne
-   - Affichage :
-     - Graphique comparant sin(x) et la spline quadratique
-     - Points d'interpolation en noir
-     - Erreurs maximale et moyenne dans la console
-
-### Exemple d'utilisation
-
-```python
-import numpy as np
-from spline_quadratique import calcul_coefficients_spline_quadratique, evaluer_spline
-
-# Définir les points d'interpolation
-x = np.array([0, 1, 2, 3, 4])
-y = np.array([0, 1, 4, 9, 16])  # y = x²
-
-# Calculer les coefficients
-a, b, c = calcul_coefficients_spline_quadratique(x, y)
-
-# Évaluer la spline en un nouveau point
-x_new = 2.5
-y_new = evaluer_spline(x_new, x, a, b, c)
-print(f"S({x_new}) = {y_new}")
-```
+3.  **Installez les dépendances** :
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 ## Dépendances
 
-- Python 3.x
-- NumPy
-- Matplotlib
+-   `numpy`
+-   `matplotlib`
+-   `sympy`
+-   `tkinter` (inclus dans la bibliothèque standard de Python)
 
-## Exécution
+## Utilisation
 
-Pour exécuter le test inclus :
+Pour lancer l'application, exécutez le script `analyse_numerique_gui.py` :
 
 ```bash
-python spline_quadratique.py
+python analyse_numerique_gui.py
 ```
 
-Cela générera un graphique comparant la fonction sinus et son approximation par spline quadratique, ainsi que les erreurs d'approximation.
-
-## Résultats typiques
-
-Le test avec la fonction sinus sur 7 points équidistants dans [0, 2π] donne :
-- Erreur maximale < 0.2
-- Erreur moyenne < 0.05
+Une fenêtre s'ouvrira. Pour l'utiliser :
+1.  **Entrez une fonction** dans le champ de texte (ex: `x**3 - cos(x)`).
+2.  **Sélectionnez un mode d'analyse** (Comparer Erreurs, Lagrange, ou Spline Quadratique).
+3.  **Cliquez sur "Générer le graphique"** pour afficher les résultats.
 
 ## Licence
 
