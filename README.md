@@ -1,30 +1,42 @@
-# Analyse Numérique : Outil d'Interpolation Unifié
+# Analyse Numérique : Outils de Résolution de Systèmes Linéaires
 
-Ce projet est une application de bureau interactive qui combine plusieurs méthodes d'interpolation et d'approximation de fonctions. Il permet de visualiser et de comparer l'interpolation de Lagrange et l'approximation par spline quadratique pour une fonction donnée par l'utilisateur.
+Ce projet est une application de bureau interactive qui implémente et compare les méthodes de résolution de systèmes linéaires. Il permet de visualiser et de comparer les algorithmes de Jacobi et Gauss-Seidel avec des graphiques de convergence en temps réel.
 
 ## Fonctionnalités
 
-- **Interface Graphique Unifiée** : Une seule fenêtre construite avec Tkinter pour accéder à toutes les analyses.
-- **Modes d'Analyse Multiples** : L'utilisateur peut choisir entre trois modes via des boutons radio :
-  1.  **Comparer Erreurs** : Affiche les courbes d'erreur de Lagrange et de la spline sur un même graphique pour une comparaison directe.
-  2.  **Lagrange** : Affiche l'approximation par le polynôme de Lagrange et sa courbe d'erreur.
-  3.  **Spline Quadratique** : Affiche l'approximation par spline quadratique et sa courbe d'erreur.
-- **Entrée de Fonction Dynamique** : Un champ de texte permet à l'utilisateur de saisir n'importe quelle fonction de `x`.
-- **Calcul Symbolique** : Utilise `sympy` pour interpréter la fonction et calculer sa dérivée, assurant une grande précision pour la condition initiale de la spline.
+- **Interface Graphique Optimisée** : Interface focalisée sur la visualisation des courbes de convergence.
+- **Algorithmes Implémentés** : 
+  1. **Méthode de Jacobi** : Algorithme itératif classique pour résoudre Ax = b
+  2. **Méthode de Gauss-Seidel** : Amélioration de Jacobi utilisant les valeurs déjà calculées
+  3. **Méthode de Newton** : Résolution de systèmes non-linéaires f(x) = 0
+- **Visualisation Interactive** : 2 graphiques principaux - convergence des erreurs et comparaison des solutions
+- **Systèmes Prédéfinis** : 4 systèmes de test de différentes tailles (2x2 à 5x5)
+- **Contrôles Clavier** : Navigation rapide avec les touches N (système suivant) et R (recalculer)
 
 ## Structure du Projet
 
-Ce projet a été développé de manière incrémentale. Voici une description de chaque fichier clé et de son rôle dans l'évolution du projet :
+### Dossier Principal
+-   `analyse_numerique_gui.py`: **Application d'Interpolation** - Interface graphique pour l'interpolation de Lagrange et les splines quadratiques.
 
--   `analyse_numerique_gui.py`: **Application Finale et Unifiée.** C'est le script principal à utiliser. Il lance une interface graphique complète qui intègre toutes les fonctionnalités : l'analyse par interpolation de Lagrange, l'approximation par spline quadratique, et la comparaison de leurs erreurs respectives.
+### Dossier Jacobi/
+-   `gauss-jacobi.py`: **Application Principale** - Interface graphique complète pour la comparaison des méthodes de Jacobi et Gauss-Seidel. C'est le script principal à utiliser pour l'analyse des systèmes linéaires.
 
--   `spline_quadratique.py`: **Première Étape.** Initialement, ce script implémentait l'approximation par spline quadratique. Il a d'abord été un script en ligne de commande, puis a été doté de sa propre interface graphique (Tkinter). Sa logique est maintenant intégrée dans l'application principale.
+-   `jacobi_newton.py`: **Méthode de Newton** - Implémentation de la méthode de Newton en dimension n > 1 utilisant l'algorithme de Jacobi pour résoudre les systèmes linéaires.
 
--   `lagrange.py`: **Deuxième Étape.** Ce script a été développé pour implémenter l'interpolation de Lagrange. Comme pour la spline, il a évolué d'un script en ligne de commande vers une application avec sa propre interface graphique. Sa fonctionnalité est également incluse dans l'application unifiée.
+-   `algorithms.py`: **Algorithmes de Base** - Implémentation des méthodes de Jacobi, Gauss-Seidel et SOR avec historique pour les graphiques.
 
--   `comparaison_interpolation.py`: **Étape de Comparaison.** Ce script a été créé pour comparer directement les erreurs des deux méthodes (Lagrange et spline) via la ligne de commande. Cette fonctionnalité est maintenant une option dans l'interface graphique principale.
+-   `jacobi_gui.py`: **Interface Alternative** - Interface graphique complète avec saisie manuelle des données.
 
--   `requirements.txt`: La liste des dépendances Python (`numpy`, `matplotlib`, `sympy`) nécessaires pour exécuter le projet.
+-   `test_algorithms.py`: **Tests Complets** - Script de test pour valider les algorithmes et comparer les performances.
+
+-   `main.py`: **Point d'Entrée** - Script de lancement pour l'interface graphique des algorithmes.
+
+### Fichiers d'Interpolation
+-   `spline_quadratique.py`: **Splines Quadratiques** - Implémentation de l'approximation par spline quadratique.
+-   `lagrange.py`: **Interpolation de Lagrange** - Implémentation de l'interpolation polynomiale de Lagrange.
+-   `comparaison_interpolation.py`: **Comparaison** - Script de comparaison des méthodes d'interpolation.
+
+-   `requirements.txt`: La liste des dépendances Python (`numpy`, `matplotlib`, `sympy`, `tkinter`) nécessaires pour exécuter le projet.
 
 ## Installation
 
@@ -50,16 +62,83 @@ Ce projet a été développé de manière incrémentale. Voici une description d
 
 ## Utilisation
 
-Pour lancer l'application, exécutez le script `analyse_numerique_gui.py` :
+### Application Principale - Algorithmes de Jacobi et Gauss-Seidel
+
+Pour lancer l'application principale de comparaison des méthodes de résolution :
+
+```bash
+python Jacobi/gauss-jacobi.py
+```
+
+**Contrôles :**
+- **N** : Changer de système (4 systèmes prédéfinis)
+- **R** : Recalculer les courbes
+- **Barre d'outils** : Zoom, pan, sauvegarde, etc.
+
+**Graphiques affichés :**
+1. **Convergence des Erreurs** : Évolution de l'erreur ||x|| au cours des itérations
+2. **Comparaison des Solutions** : Solutions trouvées par Jacobi, Gauss-Seidel et solution exacte
+
+### Application d'Interpolation
+
+Pour lancer l'application d'interpolation :
 
 ```bash
 python analyse_numerique_gui.py
 ```
 
-Une fenêtre s'ouvrira. Pour l'utiliser :
-1.  **Entrez une fonction** dans le champ de texte (ex: `x**3 - cos(x)`).
-2.  **Sélectionnez un mode d'analyse** (Comparer Erreurs, Lagrange, ou Spline Quadratique).
-3.  **Cliquez sur "Générer le graphique"** pour afficher les résultats.
+**Utilisation :**
+1. **Entrez une fonction** dans le champ de texte (ex: `x**3 - cos(x)`)
+2. **Sélectionnez un mode d'analyse** (Comparer Erreurs, Lagrange, ou Spline Quadratique)
+3. **Cliquez sur "Générer le graphique"** pour afficher les résultats
+
+### Autres Applications
+
+```bash
+# Méthode de Newton
+python Jacobi/jacobi_newton.py
+
+# Tests des algorithmes
+python Jacobi/test_algorithms.py
+
+# Interface alternative avec saisie manuelle
+python Jacobi/main.py
+```
+
+## Algorithmes Implémentés
+
+### Méthode de Jacobi
+Algorithme itératif classique pour résoudre le système linéaire **Ax = b** :
+```
+x_i^(k+1) = (b_i - Σ(j≠i) a_ij * x_j^(k)) / a_ii
+```
+
+### Méthode de Gauss-Seidel
+Amélioration de Jacobi utilisant les valeurs déjà calculées dans la même itération :
+```
+x_i^(k+1) = (b_i - Σ(j<i) a_ij * x_j^(k+1) - Σ(j>i) a_ij * x_j^(k)) / a_ii
+```
+
+### Méthode de Newton
+Résolution de systèmes non-linéaires **f(x) = 0** en dimension n > 1 :
+1. Calcul de la Jacobienne ∇f(x)
+2. Résolution du système linéaire ∇f(x) * y = -f(x) par Jacobi
+3. Mise à jour x ← x - y
+
+## Systèmes de Test
+
+Le projet inclut 4 systèmes prédéfinis :
+1. **Système 4x4** : Matrice à diagonale dominante classique
+2. **Système 3x3** : Système tridiagonal
+3. **Système 5x5** : Système plus grand
+4. **Système 2x2** : Système simple pour tests rapides
+
+## Caractéristiques Techniques
+
+- **Convergence** : Toutes les méthodes incluent des critères de convergence
+- **Visualisation** : Graphiques interactifs avec matplotlib
+- **Performance** : Comparaison automatique des temps de convergence
+- **Robustesse** : Gestion d'erreurs et validation des données
 
 ## Licence
 
