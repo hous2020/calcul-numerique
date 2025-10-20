@@ -162,7 +162,7 @@ def main():
     """
     Fonction principale pour démonstration
     """
-    # Paramètres de l'exemple de l'image
+    # Paramètres de l'exemple
     a, b = 0, 5  # Intervalle [0, 5]
     m = 5        # Nombre de rectangles
     
@@ -176,51 +176,6 @@ def main():
     # Comparaison des méthodes
     m_values = [5, 10, 20, 50]
     comparer_methodes(f, a, b, m_values)
-    
-    # Visualisation comparative
-    fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-    methods = ['gauche', 'droite', 'milieu', 'milieu']
-    m_vis = [5, 5, 5, 20]
-    
-    for i, (ax, method, m_val) in enumerate(zip(axes.flat, methods, m_vis)):
-        if method == 'gauche':
-            I_R, points, hauteurs, largeur = methode_rectangles_gauche(f, a, b, m_val)
-        elif method == 'droite':
-            I_R, points, hauteurs, largeur = methode_rectangles_droite(f, a, b, m_val)
-        else:
-            I_R, points, hauteurs, largeur = methode_rectangles_milieu(f, a, b, m_val)
-        
-        # Tracé de la courbe
-        x_curve = np.linspace(a, b, 1000)
-        y_curve = f(x_curve)
-        ax.plot(x_curve, y_curve, 'r-', linewidth=2, label=f'f(x) = 0.1x²')
-        
-        # Tracé des rectangles
-        for j in range(m_val):
-            if method == 'gauche':
-                x_rect = points[j]
-            elif method == 'droite':
-                x_rect = points[j+1]
-            else:  # milieu
-                x_rect = (points[j] + points[j+1]) / 2
-            
-            rect = Rectangle((points[j], 0), largeur, hauteurs[j], 
-                            linewidth=1, edgecolor='blue', 
-                            facecolor='lightblue', alpha=0.7)
-            ax.add_patch(rect)
-        
-        ax.set_title(f'Méthode {method} (m={m_val})', fontweight='bold')
-        ax.grid(True, alpha=0.3)
-        ax.legend()
-        
-        I_exacte = integrale_exacte(f, a, b)
-        erreur = abs(I_R - I_exacte)
-        ax.text(0.02, 0.98, f'I_R = {I_R:.4f}\nErreur = {erreur:.4f}', 
-                transform=ax.transAxes, fontsize=9,
-                verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
-    
-    plt.tight_layout()
-    plt.show()
 
 if __name__ == "__main__":
     main()

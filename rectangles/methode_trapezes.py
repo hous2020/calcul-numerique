@@ -171,92 +171,18 @@ def main():
     # Démonstration de la formule
     demonstration_formule()
     
-    # Exemple 1: Fonction parabolique f(x) = 0.1*x^2
-    print("\nEXEMPLE 1: Fonction parabolique f(x) = 0.1*x^2")
+    # Exemple: Fonction parabolique f(x) = 0.1*x^2
+    print("\nEXEMPLE: Fonction parabolique f(x) = 0.1*x^2")
     print("-" * 50)
-    a1, b1 = 0, 5
-    m1 = 5
+    a, b = 0, 5
+    m = 5
     
-    fig1, I_T1 = visualiser_trapezes(f, a1, b1, m1, "Méthode des trapèzes - f(x) = 0.1x²")
+    fig, I_T = visualiser_trapezes(f, a, b, m, "Méthode des trapèzes - f(x) = 0.1x²")
     plt.show()
     
     # Comparaison pour la fonction parabolique
     m_values = [5, 10, 20, 50]
-    comparer_methodes_integration(f, a1, b1, m_values)
-    
-    # Exemple 2: Fonction périodique (comme dans l'image)
-    print("\nEXEMPLE 2: Fonction périodique")
-    print("-" * 50)
-    a2, b2 = 0, 5
-    m2 = 5
-    
-    fig2, I_T2 = visualiser_trapezes(f_periodique, a2, b2, m2, "Méthode des trapèzes - Fonction périodique")
-    plt.show()
-    
-    # Comparaison pour la fonction périodique
-    comparer_methodes_integration(f_periodique, a2, b2, m_values)
-    
-    # Visualisation comparative
-    fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-    
-    # Fonction parabolique
-    for i, m in enumerate([5, 10]):
-        ax = axes[0, i]
-        I_T, points, valeurs, h = methode_trapezes(f, a1, b1, m)
-        
-        # Tracé de la courbe
-        x_curve = np.linspace(a1, b1, 1000)
-        y_curve = f(x_curve)
-        ax.plot(x_curve, y_curve, 'r-', linewidth=2, label=f'f(x) = 0.1x²')
-        
-        # Tracé des trapèzes
-        for j in range(m):
-            x_trap = [points[j], points[j+1], points[j+1], points[j]]
-            y_trap = [0, 0, valeurs[j+1], valeurs[j]]
-            trap = Polygon(list(zip(x_trap, y_trap)), 
-                          linewidth=1, edgecolor='blue', 
-                          facecolor='lightblue', alpha=0.7)
-            ax.add_patch(trap)
-        
-        ax.set_title(f'f(x) = 0.1x² (m={m})', fontweight='bold')
-        ax.grid(True, alpha=0.3)
-        ax.legend()
-        
-        I_exacte = integrale_exacte_parabole(f, a1, b1)
-        erreur = abs(I_T - I_exacte)
-        ax.text(0.02, 0.98, f'I_T = {I_T:.4f}\nErreur = {erreur:.4f}', 
-                transform=ax.transAxes, fontsize=9,
-                verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
-    
-    # Fonction périodique
-    for i, m in enumerate([5, 10]):
-        ax = axes[1, i]
-        I_T, points, valeurs, h = methode_trapezes(f_periodique, a2, b2, m)
-        
-        # Tracé de la courbe
-        x_curve = np.linspace(a2, b2, 1000)
-        y_curve = f_periodique(x_curve)
-        ax.plot(x_curve, y_curve, 'r-', linewidth=2, label='f(x) périodique')
-        
-        # Tracé des trapèzes
-        for j in range(m):
-            x_trap = [points[j], points[j+1], points[j+1], points[j]]
-            y_trap = [0, 0, valeurs[j+1], valeurs[j]]
-            trap = Polygon(list(zip(x_trap, y_trap)), 
-                          linewidth=1, edgecolor='blue', 
-                          facecolor='lightblue', alpha=0.7)
-            ax.add_patch(trap)
-        
-        ax.set_title(f'Fonction périodique (m={m})', fontweight='bold')
-        ax.grid(True, alpha=0.3)
-        ax.legend()
-        
-        ax.text(0.02, 0.98, f'I_T = {I_T:.4f}', 
-                transform=ax.transAxes, fontsize=9,
-                verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
-    
-    plt.tight_layout()
-    plt.show()
+    comparer_methodes_integration(f, a, b, m_values)
 
 if __name__ == "__main__":
     main()

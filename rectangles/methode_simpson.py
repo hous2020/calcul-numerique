@@ -266,104 +266,18 @@ def main():
     # Démonstration de la formule
     demonstration_formule_simpson()
     
-    # Exemple 1: Fonction parabolique f(x) = 0.1*x^2
-    print("\nEXEMPLE 1: Fonction parabolique f(x) = 0.1*x^2")
+    # Exemple: Fonction parabolique f(x) = 0.1*x^2
+    print("\nEXEMPLE: Fonction parabolique f(x) = 0.1*x^2")
     print("-" * 50)
-    a1, b1 = 0, 5
-    n1 = 2  # 2 paraboles = 5 points
+    a, b = 0, 5
+    n = 2  # 2 paraboles = 5 points
     
-    fig1, I_S1 = visualiser_simpson(f, a1, b1, n1, "Méthode de Simpson - f(x) = 0.1x²")
+    fig, I_S = visualiser_simpson(f, a, b, n, "Méthode de Simpson - f(x) = 0.1x²")
     plt.show()
     
     # Comparaison pour la fonction parabolique
     n_values = [1, 2, 5, 10]
-    comparer_methodes_integration(f, a1, b1, n_values)
-    
-    # Exemple 2: Fonction cubique (Simpson est exact pour les polynômes de degré ≤ 3)
-    print("\nEXEMPLE 2: Fonction cubique f(x) = x³ - 2x² + x + 1")
-    print("-" * 50)
-    a2, b2 = 0, 3
-    n2 = 2
-    
-    fig2, I_S2 = visualiser_simpson(f_cubique, a2, b2, n2, "Méthode de Simpson - Fonction cubique")
-    plt.show()
-    
-    # Comparaison pour la fonction cubique
-    comparer_methodes_integration(f_cubique, a2, b2, n_values)
-    
-    # Comparaison de toutes les méthodes
-    print("\nCOMPARAISON DE TOUTES LES MÉTHODES")
-    print("=" * 50)
-    comparer_toutes_methodes(f, a1, b1, 2)
-    comparer_toutes_methodes(f_cubique, a2, b2, 2)
-    
-    # Visualisation comparative
-    fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-    
-    # Fonction parabolique
-    for i, n in enumerate([1, 2]):
-        ax = axes[0, i]
-        I_S, points, valeurs, h = methode_simpson(f, a1, b1, n)
-        
-        # Tracé de la courbe
-        x_curve = np.linspace(a1, b1, 1000)
-        y_curve = f(x_curve)
-        ax.plot(x_curve, y_curve, 'r-', linewidth=2, label=f'f(x) = 0.1x²')
-        
-        # Tracé des paraboles
-        for j in range(n):
-            x_parabole = points[2*j:2*j+3]
-            y_parabole = valeurs[2*j:2*j+3]
-            poly = lagrange_interpolation(x_parabole, y_parabole)
-            x_parabole_curve = np.linspace(x_parabole[0], x_parabole[2], 100)
-            y_parabole_curve = poly(x_parabole_curve)
-            ax.plot(x_parabole_curve, y_parabole_curve, 'b--', linewidth=1.5, alpha=0.8)
-            ax.fill_between(x_parabole_curve, 0, y_parabole_curve, alpha=0.3, color='lightblue')
-            ax.plot(x_parabole, y_parabole, 'bo', markersize=4)
-        
-        ax.set_title(f'f(x) = 0.1x² (n={n})', fontweight='bold')
-        ax.grid(True, alpha=0.3)
-        ax.legend()
-        
-        I_exacte = integrale_exacte_parabole(f, a1, b1)
-        erreur = abs(I_S - I_exacte)
-        ax.text(0.02, 0.98, f'I_S = {I_S:.4f}\nErreur = {erreur:.4f}', 
-                transform=ax.transAxes, fontsize=9,
-                verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
-    
-    # Fonction cubique
-    for i, n in enumerate([1, 2]):
-        ax = axes[1, i]
-        I_S, points, valeurs, h = methode_simpson(f_cubique, a2, b2, n)
-        
-        # Tracé de la courbe
-        x_curve = np.linspace(a2, b2, 1000)
-        y_curve = f_cubique(x_curve)
-        ax.plot(x_curve, y_curve, 'r-', linewidth=2, label='f(x) cubique')
-        
-        # Tracé des paraboles
-        for j in range(n):
-            x_parabole = points[2*j:2*j+3]
-            y_parabole = valeurs[2*j:2*j+3]
-            poly = lagrange_interpolation(x_parabole, y_parabole)
-            x_parabole_curve = np.linspace(x_parabole[0], x_parabole[2], 100)
-            y_parabole_curve = poly(x_parabole_curve)
-            ax.plot(x_parabole_curve, y_parabole_curve, 'b--', linewidth=1.5, alpha=0.8)
-            ax.fill_between(x_parabole_curve, 0, y_parabole_curve, alpha=0.3, color='lightblue')
-            ax.plot(x_parabole, y_parabole, 'bo', markersize=4)
-        
-        ax.set_title(f'Fonction cubique (n={n})', fontweight='bold')
-        ax.grid(True, alpha=0.3)
-        ax.legend()
-        
-        I_exacte = integrale_exacte_cubique(f_cubique, a2, b2)
-        erreur = abs(I_S - I_exacte)
-        ax.text(0.02, 0.98, f'I_S = {I_S:.4f}\nErreur = {erreur:.4f}', 
-                transform=ax.transAxes, fontsize=9,
-                verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
-    
-    plt.tight_layout()
-    plt.show()
+    comparer_methodes_integration(f, a, b, n_values)
 
 if __name__ == "__main__":
     main()

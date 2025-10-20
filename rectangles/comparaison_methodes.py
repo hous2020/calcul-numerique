@@ -290,22 +290,16 @@ def main():
     print("COMPARAISON COMPLÈTE DES MÉTHODES D'INTÉGRATION NUMÉRIQUE")
     print("=" * 80)
     
-    # Exemples de fonctions
-    fonctions = [
-        (f_parabole, 0, 5, "f(x) = 0.1x²"),
-        (f_cubique, 0, 3, "f(x) = x³ - 2x² + x + 1"),
-        (f_periodique, 0, 5, "f(x) = 1.5 + 0.6sin(2πx/2.5) + 0.3cos(4πx/2.5)"),
-        (f_exponentielle, 0, 4, "f(x) = e^(-x/2)")
-    ]
+    # Exemple principal: Fonction parabolique
+    f, a, b, nom = f_parabole, 0, 5, "f(x) = 0.1x²"
     
-    # Comparaison pour chaque fonction
-    for f, a, b, nom in fonctions:
-        comparer_methodes_complet(f, a, b, 20, nom)
-        etude_convergence(f, a, b, nom)
-        
-        # Visualisation
-        fig = visualiser_comparaison(f, a, b, 10, nom)
-        plt.show()
+    # Comparaison des méthodes
+    comparer_methodes_complet(f, a, b, 20, nom)
+    etude_convergence(f, a, b, nom)
+    
+    # Visualisation
+    fig = visualiser_comparaison(f, a, b, 10, nom)
+    plt.show()
     
     print(f"\n{'='*80}")
     print("CONCLUSIONS:")
